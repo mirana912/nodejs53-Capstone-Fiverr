@@ -1,9 +1,12 @@
 // src/config/app.config.ts
 // ==========================================
-export default () => ({
+
+import { registerAs } from '@nestjs/config';
+
+export default registerAs('app', () => ({
   app: {
-    port: parseInt(process.env.PORT, 10) || 8080,
-    apiPrefix: process.env.API_PREFIX || 'api',
+    port: parseInt(process.env.PORT ?? '8080', 10),
+    apiPrefix: process.env.API_PREFIX ?? 'api',
     nodeEnv: process.env.NODE_ENV || 'development',
   },
   cors: {
@@ -11,9 +14,9 @@ export default () => ({
     credentials: true,
   },
   upload: {
-    maxFileSize: parseInt(process.env.MAX_FILE_SIZE, 10) || 5242880, // 5MB
-    uploadDir: process.env.UPLOAD_DIR || './uploads',
+    maxFileSize: parseInt(process.env.MAX_FILE_SIZE ?? '5242880', 10), // 5MB
+    uploadDir: process.env.UPLOAD_DIR ?? './uploads',
   },
-});
+}));
 
 // ==========================================

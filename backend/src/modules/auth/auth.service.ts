@@ -14,6 +14,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  private async hashPassword(password: string): Promise<string> {
+    const SALT_ROUND = 12;
+    return bcrypt.hash(password, SALT_ROUND);
+  }
   async register(registerDto: RegisterDto) {
     // Check if email already exists
     const existingUser = await this.prisma.nguoiDung.findUnique({
@@ -25,7 +29,7 @@ export class AuthService {
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(registerDto.pass_word, 10);
+    const hashedPassword = await this.hashPassword(registerDto.pass_word);
 
     // Create user
     const user = await this.prisma.nguoiDung.create({
@@ -55,7 +59,7 @@ export class AuthService {
     const user = await this.validateUser(loginDto.email, loginDto.pass_word);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException('Invalid login information');
     }
 
     const token = this.generateToken(user);
