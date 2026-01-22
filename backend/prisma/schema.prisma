@@ -1,0 +1,180 @@
+// backend/prisma/schema.prisma
+// ==========================================
+
+datasource db {
+    provider = "mysql"
+}
+
+generator client {
+    provider   = "prisma-client"
+    output     = "../generated/prisma"
+    engineType = "client"
+}
+
+// ==========================================
+// MODEL: NguoiDung (Users)
+// ==========================================
+model NguoiDung {
+    id            Int     @id @default(autoincrement())
+    name          String  @db.VarChar(255)
+    email         String  @unique @db.VarChar(255)
+    pass_word     String  @db.VarChar(255)
+    phone         String? @db.VarChar(50)
+    birth_day     String? @db.VarChar(50)
+    gender        String? @db.VarChar(10)
+    role          String  @default("user") @db.VarChar(20) // user, admin
+    skill         String? @db.Text
+    certification String? @db.Text
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relationships
+    congViec     CongViec[] // Jobs created by user
+    thueCongViec ThueCongViec[] // Jobs hired by user
+    binhLuan     BinhLuan[] // Comments made by user
+
+    @@map("nguoi_dung")
+}
+
+// ==========================================
+// MODEL: LoaiCongViec (Job Categories)
+// ==========================================
+model LoaiCongViec {
+    id                 Int    @id @default(autoincrement())
+    ten_loai_cong_viec String @db.VarChar(255)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relationships
+    chiTietLoaiCongViec ChiTietLoaiCongViec[]
+
+    @@map("loai_cong_viec")
+}
+
+// ==========================================
+// MODEL: ChiTietLoaiCongViec (Category Details)
+// ==========================================
+model ChiTietLoaiCongViec {
+    id                Int     @id @default(autoincrement())
+    ten_chi_tiet      String  @db.VarChar(255)
+    hinh_anh          String? @db.VarChar(500)
+    ma_loai_cong_viec Int
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relationships
+    loaiCongViec LoaiCongViec @relation(fields: [ma_loai_cong_viec], references: [id], onDelete: Cascade)
+    congViec     CongViec[]
+
+    @@map("chi_tiet_loai_cong_viec")
+}
+
+// ==========================================
+// MODEL: CongViec (Jobs/Services)
+// ==========================================
+model CongViec {
+    id               Int     @id @default(autoincrement())
+    ten_cong_viec    String  @db.VarChar(255)
+    danh_gia         Int     @default(0)
+    gia_tien         Int     @default(0)
+    hinh_anh         String? @db.VarChar(500)
+    mo_ta            String? @db.Text
+    mo_ta_ngan       String? @db.VarChar(500)
+    sao_cong_viec    Int     @default(0)
+    ma_chi_tiet_loai Int
+    nguoi_tao        Int
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relationships
+    chiTietLoaiCongViec ChiTietLoaiCongViec @relation(fields: [ma_chi_tiet_loai], references: [id], onDelete: Cascade)
+    nguoiDung           NguoiDung           @relation(fields: [nguoi_tao], references: [id], onDelete: Cascade)
+    thueCongViec        ThueCongViec[]
+    binhLuan            BinhLuan[]
+
+    @@index([ma_chi_tiet_loai])
+    @@index([nguoi_tao])
+    @@map("cong_viec")
+}
+
+// ==========================================
+// MODEL: ThueCongViec (Hired Jobs)
+// ==========================================
+model ThueCongViec {
+    id            Int      @id @default(autoincrement())
+    ma_cong_viec  Int
+    ma_nguoi_thue Int
+    ngay_thue     DateTime @default(now())
+    hoan_thanh    Boolean  @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relationships
+    congViec  CongViec  @relation(fields: [ma_cong_viec], references: [id], onDelete: Cascade)
+    nguoiDung NguoiDung @relation(fields: [ma_nguoi_thue], references: [id], onDelete: Cascade)
+
+    @@index([ma_cong_viec])
+    @@index([ma_nguoi_thue])
+    @@map("thue_cong_viec")
+}
+
+// ==========================================
+// MODEL: BinhLuan (Comments)
+// ==========================================
+model BinhLuan {
+    id                 Int      @id @default(autoincrement())
+    ma_cong_viec       Int
+    ma_nguoi_binh_luan Int
+    ngay_binh_luan     DateTime @default(now())
+    noi_dung           String   @db.Text
+    sao_binh_luan      Int      @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relationships
+    congViec  CongViec  @relation(fields: [ma_cong_viec], references: [id], onDelete: Cascade)
+    nguoiDung NguoiDung @relation(fields: [ma_nguoi_binh_luan], references: [id], onDelete: Cascade)
+
+    @@index([ma_cong_viec])
+    @@index([ma_nguoi_binh_luan])
+    @@map("binh_luan")
+}
+
+// ==========================================
+// NOTES:
+// ==========================================
+
+/**
+ * ## Relationships Summary:
+ * 1. NguoiDung (1) -> (N) CongViec
+ * - User có thể tạo nhiều jobs
+ * 2. NguoiDung (1) -> (N) ThueCongViec
+ * - User có thể thuê nhiều jobs
+ * 3. NguoiDung (1) -> (N) BinhLuan
+ * - User có thể comment nhiều jobs
+ * 4. LoaiCongViec (1) -> (N) ChiTietLoaiCongViec
+ * - Category có nhiều subcategories
+ * 5. ChiTietLoaiCongViec (1) -> (N) CongViec
+ * - Subcategory có nhiều jobs
+ * 6. CongViec (1) -> (N) ThueCongViec
+ * - Job có thể được thuê nhiều lần
+ * 7. CongViec (1) -> (N) BinhLuan
+ * - Job có thể có nhiều comments
+ * ## Commands:
+ * # Generate Prisma Client
+ * npx prisma generate
+ * # Push schema to database (dev)
+ * npx prisma db push
+ * # Create migration
+ * npx prisma migrate dev --name init
+ * # Open Prisma Studio
+ * npx prisma studio
+ * # Seed database
+ * npx prisma db seed
+ */

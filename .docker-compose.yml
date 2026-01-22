@@ -1,0 +1,84 @@
+#  docker-compose.yml
+# ==========================================
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: cyber-fiverr-mysql
+    restart: always
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: cyber_fiverr
+      MYSQL_USER: fiverr_user
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - fiverr-network
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p123456']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache (Optional - for sessions, rate limiting)
+  redis:
+    image: redis:7-alpine
+    container_name: cyber-fiverr-redis
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - fiverr-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API (NestJS)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cyber-fiverr-backend
+    restart: always
+    ports:
+      - '8080:8080'
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      DATABASE_URL: mysql://fiverr_user:123456@mysql:3306/cyber_fiverr
+      JWT_SECRET: your_super_secret_jwt_key_change_in_production
+      JWT_EXPIRES_IN: 7d
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - fiverr-network
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  fiverr-network:
+    driver: bridge
+
+# ==========================================
