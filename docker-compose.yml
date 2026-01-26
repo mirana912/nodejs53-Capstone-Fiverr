@@ -17,7 +17,7 @@ services:
       MYSQL_PASSWORD: 123456
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/1-init.sql
       - ./docker/mysql/seeder.sql:/docker-entrypoint-initdb.d/2-seeder.sql
     networks:
       - fiverr-network
@@ -46,31 +46,31 @@ services:
       retries: 5
 
   # Backend API (NestJS)
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: cyber-fiverr-backend
-    restart: always
-    ports:
-      - '8080:8080'
-    environment:
-      NODE_ENV: production
-      PORT: 8080
-      DATABASE_URL: mysql://fiverr_user:123456@mysql:3306/cyber_fiverr
-      JWT_SECRET: your_super_secret_jwt_key_change_in_production
-      JWT_EXPIRES_IN: 7d
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-    volumes:
-      - ./backend/uploads:/app/uploads
-    depends_on:
-      mysql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - fiverr-network
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: cyber-fiverr-backend
+  #   restart: always
+  #   ports:
+  #     - '8080:8080'
+  #   environment:
+  #     NODE_ENV: production
+  #     PORT: 8080
+  #     DATABASE_URL: mysql://fiverr_user:123456@mysql:3306/cyber_fiverr
+  #     JWT_SECRET: your_super_secret_jwt_key_change_in_production
+  #     JWT_EXPIRES_IN: 7d
+  #     REDIS_HOST: redis
+  #     REDIS_PORT: 6379
+  #   volumes:
+  #     - ./backend/uploads:/app/uploads
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - fiverr-network
 
 volumes:
   mysql_data:

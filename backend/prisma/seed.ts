@@ -3,23 +3,23 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({});
 
 async function main() {
-  console.log('🌱 Starting database seeding...\n');
+  console.log('Starting database seeding...\n');
 
   // Clear existing data
-  console.log('🗑️  Clearing existing data...');
+  console.log('Clearing existing data...');
   await prisma.binhLuan.deleteMany();
   await prisma.thueCongViec.deleteMany();
   await prisma.congViec.deleteMany();
   await prisma.chiTietLoaiCongViec.deleteMany();
   await prisma.loaiCongViec.deleteMany();
   await prisma.nguoiDung.deleteMany();
-  console.log('✅ Data cleared\n');
+  console.log('Data cleared\n');
 
   // Create users
-  console.log('👥 Creating users...');
+  console.log('Creating users...');
   const hashedPassword = await bcrypt.hash('123456', 10);
 
   const users = await Promise.all([
@@ -58,10 +58,10 @@ async function main() {
       },
     }),
   ]);
-  console.log(`✅ Created ${users.length} users\n`);
+  console.log(`Created ${users.length} users\n`);
 
   // Create categories
-  console.log('📂 Creating categories...');
+  console.log('Creating categories...');
   const categories = await Promise.all([
     prisma.loaiCongViec.create({
       data: {
@@ -84,10 +84,10 @@ async function main() {
       },
     }),
   ]);
-  console.log(`✅ Created ${categories.length} categories\n`);
+  console.log(`Created ${categories.length} categories\n`);
 
   // Create category details
-  console.log('📋 Creating category details...');
+  console.log('Creating category details...');
   const categoryDetails = await Promise.all([
     // Programming & Tech
     prisma.chiTietLoaiCongViec.create({
@@ -136,7 +136,7 @@ async function main() {
       },
     }),
   ]);
-  console.log(`✅ Created ${categoryDetails.length} category details\n`);
+  console.log(`Created ${categoryDetails.length} category details\n`);
 
   // Create jobs
   console.log('💼 Creating jobs...');
@@ -197,7 +197,7 @@ async function main() {
       },
     }),
   ]);
-  console.log(`✅ Created ${jobs.length} jobs\n`);
+  console.log(`Created ${jobs.length} jobs\n`);
 
   // Create hires
   console.log('🤝 Creating hire records...');
@@ -219,10 +219,10 @@ async function main() {
       },
     }),
   ]);
-  console.log(`✅ Created ${hires.length} hire records\n`);
+  console.log(`Created ${hires.length} hire records\n`);
 
   // Create comments
-  console.log('💬 Creating comments...');
+  console.log('Creating comments...');
   const comments = await Promise.all([
     prisma.binhLuan.create({
       data: {
@@ -249,7 +249,7 @@ async function main() {
       },
     }),
   ]);
-  console.log(`✅ Created ${comments.length} comments\n`);
+  console.log(`Created ${comments.length} comments\n`);
 
   console.log('📊 SEEDING SUMMARY:');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');

@@ -59,4 +59,4 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 /generated/prisma
 
 #docker
-.docker-compose
+docker-compose
