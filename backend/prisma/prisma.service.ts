@@ -1,3 +1,6 @@
+// backend/prisma/prisma.service.ts
+// ==========================================
+
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
@@ -7,13 +10,12 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger(PrismaService.name);
 
   constructor() {
-    super({});
+    super();
   }
   async onModuleInit() {
     await this.$connect();
     this.logger.log('Database connected successfully');
 
-    // Tự động seed nếu database trống
     await this.seedIfEmpty();
   }
 
