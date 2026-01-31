@@ -3,10 +3,12 @@
 
 datasource db {
     provider = "mysql"
+    // url = env("DATABSE_URL")
 }
 
 generator client {
     provider = "prisma-client-js"
+    // previewFeatures = ["driverAdapters"]
 }
 
 // ==========================================

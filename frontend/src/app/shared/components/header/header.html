@@ -1,0 +1,212 @@
+<!-- src/app/shared/components/header/header.component.html -->
+
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a
+          routerLink="/"
+          class="text-2xl font-bold text-primary hover:text-primary/80 transition-colors"
+        >
+          fiverr<span class="text-secondary">.</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <a
+          routerLink="/"
+          routerLinkActive="text-primary"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="text-secondary hover:text-primary transition-colors font-medium"
+        >
+          Trang chủ
+        </a>
+        <a
+          routerLink="/categories"
+          routerLinkActive="text-primary"
+          class="text-secondary hover:text-primary transition-colors font-medium"
+        >
+          Danh mục
+        </a>
+        <a
+          routerLink="/jobs"
+          routerLinkActive="text-primary"
+          class="text-secondary hover:text-primary transition-colors font-medium"
+        >
+          Công việc
+        </a>
+      </nav>
+
+      <!-- Auth Buttons / User Menu -->
+      <div class="hidden md:flex items-center space-x-4">
+        <!-- If NOT authenticated -->
+        <ng-container *ngIf="!(isAuthenticated$ | async)">
+          <a
+            routerLink="/login"
+            class="text-secondary hover:text-primary font-medium transition-colors"
+          >
+            Đăng nhập
+          </a>
+          <a
+            routerLink="/register"
+            class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium"
+          >
+            Đăng ký
+          </a>
+        </ng-container>
+
+        <!-- If authenticated -->
+        <ng-container *ngIf="isAuthenticated$ | async">
+          <div class="relative">
+            <button
+              (click)="toggleMenu()"
+              class="flex items-center space-x-2 text-secondary hover:text-primary transition-colors"
+            >
+              <div
+                class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold"
+              >
+                {{ (currentUser$ | async)?.email?.charAt(0).toUpperCase() }}
+              </div>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div
+              *ngIf="isMenuOpen"
+              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200"
+            >
+              <div class="px-4 py-2 border-b border-gray-100">
+                <p class="text-sm font-medium text-secondary">
+                  {{ (currentUser$ | async)?.email }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ (currentUser$ | async)?.role }}
+                </p>
+              </div>
+
+              <a
+                routerLink="/profile"
+                (click)="toggleMenu()"
+                class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100"
+              >
+                Thông tin cá nhân
+              </a>
+
+              <a
+                routerLink="/my-jobs"
+                (click)="toggleMenu()"
+                class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100"
+              >
+                Công việc đã thuê
+              </a>
+
+              <a
+                *ngIf="authService.isAdmin()"
+                routerLink="/admin"
+                (click)="toggleMenu()"
+                class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100"
+              >
+                Quản trị
+              </a>
+
+              <button
+                (click)="logout()"
+                class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+              >
+                Đăng xuất
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button class="md:hidden text-secondary" (click)="toggleMenu()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div *ngIf="isMenuOpen" class="md:hidden py-4 border-t border-gray-200">
+      <nav class="flex flex-col space-y-2">
+        <a
+          routerLink="/"
+          (click)="toggleMenu()"
+          class="px-4 py-2 text-secondary hover:bg-gray-100 rounded"
+        >
+          Trang chủ
+        </a>
+        <a
+          routerLink="/categories"
+          (click)="toggleMenu()"
+          class="px-4 py-2 text-secondary hover:bg-gray-100 rounded"
+        >
+          Danh mục
+        </a>
+        <a
+          routerLink="/jobs"
+          (click)="toggleMenu()"
+          class="px-4 py-2 text-secondary hover:bg-gray-100 rounded"
+        >
+          Công việc
+        </a>
+
+        <ng-container *ngIf="!(isAuthenticated$ | async)">
+          <a
+            routerLink="/login"
+            (click)="toggleMenu()"
+            class="px-4 py-2 text-secondary hover:bg-gray-100 rounded"
+          >
+            Đăng nhập
+          </a>
+          <a
+            routerLink="/register"
+            (click)="toggleMenu()"
+            class="px-4 py-2 bg-primary text-white hover:bg-primary/90 rounded"
+          >
+            Đăng ký
+          </a>
+        </ng-container>
+
+        <ng-container *ngIf="isAuthenticated$ | async">
+          <a
+            routerLink="/profile"
+            (click)="toggleMenu()"
+            class="px-4 py-2 text-secondary hover:bg-gray-100 rounded"
+          >
+            Thông tin cá nhân
+          </a>
+          <a
+            routerLink="/my-jobs"
+            (click)="toggleMenu()"
+            class="px-4 py-2 text-secondary hover:bg-gray-100 rounded"
+          >
+            Công việc đã thuê
+          </a>
+          <button
+            (click)="logout()"
+            class="text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded"
+          >
+            Đăng xuất
+          </button>
+        </ng-container>
+      </nav>
+    </div>
+  </div>
+</header>
