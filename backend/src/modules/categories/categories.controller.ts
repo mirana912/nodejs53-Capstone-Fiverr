@@ -1,3 +1,5 @@
+// src/modules/categories/categories.controller.ts
+// ==========================================
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 
@@ -25,3 +27,5 @@ export class CategoriesController {
     return this.categoriesService.getAllDetails();
   }
 }
+
+// ==========================================

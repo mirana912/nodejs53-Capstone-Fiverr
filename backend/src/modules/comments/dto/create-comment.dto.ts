@@ -1,3 +1,5 @@
+// src/modules/comments/dto/create-comment.dto.ts
+// ==========================================
 import { IsString, IsNumber, Min, Max } from 'class-validator';
 
 export class CreateCommentDto {
@@ -12,3 +14,5 @@ export class CreateCommentDto {
   @Max(5)
   sao_binh_luan: number;
 }
+
+// ==========================================

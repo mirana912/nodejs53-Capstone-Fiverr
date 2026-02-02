@@ -1,3 +1,5 @@
+// src/modules/jobs/job.controller.ts
+// ==========================================
 import {
   Controller,
   Get,
@@ -71,3 +73,5 @@ export class JobsController {
     return this.jobsService.remove(id, req.user.userId);
   }
 }
+
+// ==========================================

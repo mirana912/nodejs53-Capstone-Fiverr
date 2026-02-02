@@ -1,3 +1,5 @@
+// src/modules/upload/upload.controller.ts
+// ==========================================
 import {
   Controller,
   Post,
@@ -83,3 +85,5 @@ export class UploadController {
     return this.uploadService.uploadCategoryImage(categoryDetailId, file);
   }
 }
+
+// ==========================================

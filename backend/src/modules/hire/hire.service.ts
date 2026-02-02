@@ -1,3 +1,5 @@
+// src/modules/hire/hire.service.ts
+// ==========================================
 import {
   Injectable,
   NotFoundException,
@@ -231,3 +233,5 @@ export class HireService {
     });
   }
 }
+
+// ==========================================

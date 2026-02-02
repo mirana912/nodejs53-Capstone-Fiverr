@@ -1,3 +1,5 @@
+// src/modules/hire/hire.controller.ts
+// ==========================================
 import {
   Controller,
   Get,
@@ -53,3 +55,5 @@ export class HireController {
     return this.hireService.getJobHires(jobId, req.user.userId);
   }
 }
+
+// ==========================================

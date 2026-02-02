@@ -1,3 +1,5 @@
+// src/main.ts
+// ==========================================
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -6,15 +8,15 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { join } from 'path';
 // import { config } from 'process';
 // import { transcode } from 'buffer';
-import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const configService = app.get(ConfigService);
-  const port = configService.get<number>('app.port') ?? 'port';
+
   const apiPrefix = configService.get<string>('app.apiPrefix') ?? 'api';
   const nodeEnv = configService.get<string>('app.nodeEnv');
 
@@ -68,6 +70,7 @@ async function bootstrap() {
     },
   });
 
+  const port = configService.get<number>('app.port') ?? 3000;
   await app.listen(port);
 
   console.log(`
@@ -79,3 +82,5 @@ async function bootstrap() {
     `);
 }
 bootstrap();
+
+// ==========================================

@@ -1,3 +1,5 @@
+// src/modules/jobs/job.service.ts
+// ==========================================
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateJobDto, UpdateJobDto } from './dto/create-job.dto';
@@ -241,3 +243,5 @@ export class JobsService {
     });
   }
 }
+
+// ==========================================

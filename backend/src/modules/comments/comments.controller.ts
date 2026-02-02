@@ -1,3 +1,5 @@
+// src/modules/comments/comments.controller.ts
+// ==========================================
 import {
   Controller,
   Get,
@@ -34,3 +36,5 @@ export class CommentsController {
     return this.commentsService.remove(id, req.user.userId);
   }
 }
+
+// ==========================================

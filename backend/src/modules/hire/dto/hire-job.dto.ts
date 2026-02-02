@@ -1,3 +1,5 @@
+// src/modules/hire/hire-job.dto.ts
+// ==========================================
 import { IsNumber, IsBoolean, IsOptional } from 'class-validator';
 
 export class HireJobDto {
@@ -10,3 +12,5 @@ export class UpdateHireDto {
   @IsOptional()
   hoan_thanh?: boolean;
 }
+
+// ==========================================

@@ -1,3 +1,5 @@
+// src/modules/jobs/job.module.ts
+// ==========================================
 import { Module } from '@nestjs/common';
 import { JobsController } from './jobs.controller';
 import { JobsService } from './jobs.service';
@@ -9,3 +11,5 @@ import { PrismaModule } from '../../../prisma/prisma.module';
   providers: [JobsService],
 })
 export class JobsModule {}
+
+// ==========================================

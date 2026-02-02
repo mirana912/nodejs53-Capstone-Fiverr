@@ -139,7 +139,7 @@ async function main() {
   console.log(`Created ${categoryDetails.length} category details\n`);
 
   // Create jobs
-  console.log('💼 Creating jobs...');
+  console.log('Creating jobs...');
   const jobs = await Promise.all([
     prisma.congViec.create({
       data: {
@@ -200,7 +200,7 @@ async function main() {
   console.log(`Created ${jobs.length} jobs\n`);
 
   // Create hires
-  console.log('🤝 Creating hire records...');
+  console.log('Creating hire records...');
   const hires = await Promise.all([
     prisma.thueCongViec.create({
       data: {
@@ -251,18 +251,18 @@ async function main() {
   ]);
   console.log(`Created ${comments.length} comments\n`);
 
-  console.log('📊 SEEDING SUMMARY:');
+  console.log('SEEDING SUMMARY:');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log(`   👥 Users:              ${users.length}`);
-  console.log(`   📂 Categories:         ${categories.length}`);
-  console.log(`   📋 Category Details:   ${categoryDetails.length}`);
-  console.log(`   💼 Jobs:               ${jobs.length}`);
-  console.log(`   🤝 Hires:              ${hires.length}`);
-  console.log(`   💬 Comments:           ${comments.length}`);
+  console.log(`   Users:              ${users.length}`);
+  console.log(`   Categories:         ${categories.length}`);
+  console.log(`   Category Details:   ${categoryDetails.length}`);
+  console.log(`   Jobs:               ${jobs.length}`);
+  console.log(`   Hires:              ${hires.length}`);
+  console.log(`   Comments:           ${comments.length}`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-  console.log('🎉 Database seeding completed successfully!\n');
-  console.log('📝 Test credentials:');
+  console.log('Database seeding completed successfully!\n');
+  console.log('Test credentials:');
   console.log('   User: john@example.com / 123456');
   console.log('   User: jane@example.com / 123456');
   console.log('   Admin: admin@example.com / 123456\n');
@@ -270,7 +270,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error('❌ Error seeding database:', e);
+    console.error('Error seeding database:', e);
     process.exit(1);
   })
   .finally(async () => {

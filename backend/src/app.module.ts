@@ -1,3 +1,5 @@
+// src/app.module.ts
+// ==========================================
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -44,3 +46,5 @@ import { UploadModule } from './modules/upload/upload.module';
   ],
 })
 export class AppModule {}
+
+// ==========================================

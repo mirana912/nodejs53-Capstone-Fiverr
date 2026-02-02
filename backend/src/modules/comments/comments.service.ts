@@ -1,3 +1,5 @@
+// src/modules/comments/comments.service.ts
+// ==========================================
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -130,3 +132,5 @@ export class CommentsService {
     });
   }
 }
+
+// ==========================================

@@ -1,3 +1,5 @@
+// src/modules/categories/categories.controller.spec.ts
+// ==========================================
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoriesController } from './categories.controller';
 
@@ -16,3 +18,5 @@ describe('CategoriesController', () => {
     expect(controller).toBeDefined();
   });
 });
+
+// ==========================================

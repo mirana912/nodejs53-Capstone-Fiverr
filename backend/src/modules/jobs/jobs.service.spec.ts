@@ -1,3 +1,5 @@
+// src/modules/jobs/job.service.spec.ts
+// ==========================================
 import { Test, TestingModule } from '@nestjs/testing';
 import { JobsService } from './jobs.service';
 
@@ -16,3 +18,5 @@ describe('JobsService', () => {
     expect(service).toBeDefined();
   });
 });
+
+// ==========================================

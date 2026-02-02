@@ -1,3 +1,5 @@
+// src/modules/hire/hire.controller.spec.ts
+// ==========================================
 import { Test, TestingModule } from '@nestjs/testing';
 import { HireController } from './hire.controller';
 
@@ -16,3 +18,5 @@ describe('HireController', () => {
     expect(controller).toBeDefined();
   });
 });
+
+// ==========================================

@@ -1,3 +1,5 @@
+// src/modules/categories/categories.module.ts
+// ==========================================
 import { Module } from '@nestjs/common';
 import { CategoriesController } from './categories.controller';
 import { CategoriesService } from './categories.service';
@@ -9,3 +11,5 @@ import { PrismaModule } from '../../../prisma/prisma.module';
   providers: [CategoriesService],
 })
 export class CategoriesModule {}
+
+// ==========================================

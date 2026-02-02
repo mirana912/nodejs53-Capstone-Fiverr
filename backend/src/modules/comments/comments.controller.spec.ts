@@ -1,3 +1,5 @@
+// src/modules/comments/comments.controller.spec.ts
+// ==========================================
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentsController } from './comments.controller';
 
@@ -16,3 +18,5 @@ describe('CommentsController', () => {
     expect(controller).toBeDefined();
   });
 });
+
+// ==========================================

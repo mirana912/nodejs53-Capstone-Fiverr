@@ -1,3 +1,5 @@
+// src/modules/hire/hire.module.ts
+// ==========================================
 import { Module } from '@nestjs/common';
 import { HireController } from './hire.controller';
 import { HireService } from './hire.service';
@@ -9,3 +11,5 @@ import { PrismaModule } from '../../../prisma/prisma.module';
   providers: [HireService],
 })
 export class HireModule {}
+
+// ==========================================

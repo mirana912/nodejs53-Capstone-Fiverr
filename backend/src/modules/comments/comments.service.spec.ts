@@ -1,3 +1,5 @@
+// src/modules/comments/comments.service.spec.ts
+// ==========================================
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentsService } from './comments.service';
 
@@ -16,3 +18,5 @@ describe('CommentsService', () => {
     expect(service).toBeDefined();
   });
 });
+
+// ==========================================

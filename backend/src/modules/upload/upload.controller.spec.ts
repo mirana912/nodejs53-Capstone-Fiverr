@@ -1,3 +1,5 @@
+// src/modules/upload/upload.controller.spec.ts
+// ==========================================
 import { Test, TestingModule } from '@nestjs/testing';
 import { UploadController } from './upload.controller';
 
@@ -16,3 +18,5 @@ describe('UploadController', () => {
     expect(controller).toBeDefined();
   });
 });
+
+// ==========================================

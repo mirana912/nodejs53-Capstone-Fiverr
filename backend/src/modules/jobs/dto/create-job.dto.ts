@@ -1,3 +1,5 @@
+// src/modules/jobs/dto/create-job.dto.ts
+// ==========================================
 import { IsString, IsNumber, IsOptional, Min, Max } from 'class-validator';
 
 export class CreateJobDto {
@@ -50,3 +52,5 @@ export class UpdateJobDto {
   @IsOptional()
   ma_chi_tiet_loai?: number;
 }
+
+// ==========================================
