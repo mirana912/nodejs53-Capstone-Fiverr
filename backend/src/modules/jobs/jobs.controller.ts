@@ -16,8 +16,10 @@ import {
 import { JobsService } from './jobs.service';
 import { CreateJobDto, UpdateJobDto } from './dto/create-job.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Controller('jobs')
+@Public()
 export class JobsController {
   constructor(private readonly jobsService: JobsService) {}
 

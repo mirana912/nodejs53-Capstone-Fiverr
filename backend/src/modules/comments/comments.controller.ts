@@ -14,8 +14,10 @@ import {
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Controller('comments')
+@Public()
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 

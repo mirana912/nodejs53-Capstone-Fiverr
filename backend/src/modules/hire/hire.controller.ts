@@ -15,8 +15,10 @@ import {
 import { HireService } from './hire.service';
 import { HireJobDto, UpdateHireDto } from './dto/hire-job.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Controller('hire')
+@Public()
 @UseGuards(JwtAuthGuard)
 export class HireController {
   constructor(private readonly hireService: HireService) {}

@@ -17,6 +17,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       password: process.env.DB_PASSWORD || '123456',
       database: process.env.DB_NAME || 'cyber_fiverr',
       port: Number(process.env.DB_PORT) || 3306,
+      allowPublicKeyRetrieval: true,
+      connectTimeout: 10000,
+      acquireTimeout: 10000,
+      connectionLimit: 10,
     });
 
     super({
