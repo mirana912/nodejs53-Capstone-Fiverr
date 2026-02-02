@@ -6,13 +6,12 @@ import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import appConfig from './config/app.config';
 
-// Import modules (will create later)
+import { JobsModule } from './modules/jobs/jobs.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { HireModule } from './modules/hire/hire.module';
+import { CommentsModule } from './modules/comments/comments.module';
+import { UploadModule } from './modules/upload/upload.module';
 // import { UsersModule } from './modules/users/users.module';
-// import { JobsModule } from './modules/jobs/jobs.module';
-// import { CategoriesModule } from './modules/categories/categories.module';
-// import { HiresModule } from './modules/hires/hires.module';
-// import { CommentsModule } from './modules/comments/comments.module';
-// import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -23,12 +22,16 @@ import appConfig from './config/app.config';
     }),
     PrismaModule,
     AuthModule,
+    CategoriesModule,
+    JobsModule,
+    CommentsModule,
+    HireModule,
+    UploadModule,
     // UsersModule,
-    // JobsModule,
-    // CategoriesModule,
-    // HiresModule,
-    // CommentsModule,
-    // UploadModule,
+    JobsModule,
+    CategoriesModule,
+    HireModule,
+    CommentsModule,
   ],
   controllers: [],
   providers: [

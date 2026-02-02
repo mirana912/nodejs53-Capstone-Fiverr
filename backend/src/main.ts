@@ -3,13 +3,15 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { config } from 'process';
-import { transcode } from 'buffer';
+// import { config } from 'process';
+// import { transcode } from 'buffer';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('app.port') ?? 'port';
@@ -21,6 +23,8 @@ async function bootstrap() {
   app.enableCors({
     origin: configService.get<string>('cors.origin') || '*',
     credentials: configService.get<boolean>('cors.credentials'),
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   app.useGlobalPipes(
@@ -35,6 +39,11 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
+
+  // Serve static files (uploaded images)
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads/',
+  });
 
   const config = new DocumentBuilder()
     .setTitle('CyberFiverr API')
@@ -63,9 +72,10 @@ async function bootstrap() {
 
   console.log(`
     Application is running!
-    Environment: ${nodeEnv}
+    Environment: ${process.env.NODE_ENV || 'development'}
     URL: http://localhost:${port}/${apiPrefix}
     Swagger: http://localhost:${port}/swagger
+    Uploads: http://localhost:${port}/uploads
     `);
 }
 bootstrap();

@@ -5,37 +5,32 @@ import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import * as bcrypt from 'bcrypt';
-import { createPool, Pool } from 'mariadb';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger(PrismaService.name);
-  private pool: Pool;
 
   constructor() {
-    const pool = createPool({
+    const adapter = new PrismaMariaDb({
       host: process.env.DB_HOST || 'localhost',
       user: process.env.DB_USER || 'fiverr_user',
       password: process.env.DB_PASSWORD || '123456',
       database: process.env.DB_NAME || 'cyber_fiverr',
       port: Number(process.env.DB_PORT) || 3306,
     });
-    const adapter = new PrismaMariaDb(pool);
+
     super({
       adapter: adapter as any,
     });
-    this.pool = pool;
   }
   async onModuleInit() {
     await this.$connect();
     this.logger.log('Database connected successfully');
-
     await this.seedIfEmpty();
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
-    await this.pool.end();
     this.logger.log('Database disconnected');
   }
 
