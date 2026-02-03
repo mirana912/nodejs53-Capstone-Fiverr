@@ -38,6 +38,12 @@ export class UsersController {
     return this.usersService.findAll(query);
   }
 
+  // Public - Search by name
+  @Get('search')
+  searchByName(@Query('name') name: string) {
+    return this.usersService.searchByName(name);
+  }
+
   // Public - Search by ID
   @Get(':id')
   @ApiOperation({ summary: 'Get user by ID' })
@@ -45,12 +51,6 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User not found' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
-  }
-
-  // ✅ Public - Search by name
-  @Get('search')
-  searchByName(@Query('name') name: string) {
-    return this.usersService.searchByName(name);
   }
 
   // Public - Update user
