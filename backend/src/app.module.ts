@@ -13,7 +13,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { HireModule } from './modules/hire/hire.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { UploadModule } from './modules/upload/upload.module';
-// import { UsersModule } from './modules/users/users.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { UploadModule } from './modules/upload/upload.module';
     CommentsModule,
     HireModule,
     UploadModule,
-    // UsersModule,
+    UsersModule,
     JobsModule,
     CategoriesModule,
     HireModule,
@@ -37,8 +37,6 @@ import { UploadModule } from './modules/upload/upload.module';
   ],
   controllers: [],
   providers: [
-    // Global JWT Guard - All routes are protected by default
-    // Use @Public() decorator to make routes public
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
