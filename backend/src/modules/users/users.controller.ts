@@ -31,11 +31,18 @@ export class UsersController {
 
   // Admin only - Get all users
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   @ApiOperation({ summary: 'Get all users (paginated)' })
   @ApiResponse({ status: 200, description: 'List of users' })
   findAll(@Query() query: QueryUserDto) {
     return this.usersService.findAll(query);
+  }
+
+  // Public - Search by name
+  @Get('search')
+  searchByName(@Query('name') name: string) {
+    return this.usersService.searchByName(name);
   }
 
   // Public - Search by ID
@@ -47,12 +54,6 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  // ✅ Public - Search by name
-  @Get('search')
-  searchByName(@Query('name') name: string) {
-    return this.usersService.searchByName(name);
-  }
-
   // Public - Update user
   @Put(':id')
   @UseGuards(JwtAuthGuard)
@@ -61,6 +62,7 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User not found' })
   update(
     @Param('id', ParseIntPipe) id: number,
+    @Request() req,
     @Body() updateUserDto: UpdateUserDto,
     @CurrentUser() user: any,
   ) {

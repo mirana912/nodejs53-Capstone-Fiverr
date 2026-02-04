@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  // Lấy tất cả user
+  // Find all user
   async findAll(query: QueryUserDto) {
     const { name, page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
@@ -57,7 +57,7 @@ export class UsersService {
       },
     };
   }
-  // Search user theo ID
+  // Search user by ID
   async findOne(id: number) {
     const user = await this.prisma.nguoiDung.findUnique({
       where: { id },
@@ -92,7 +92,7 @@ export class UsersService {
 
     return user;
   }
-  // Search user theo tên
+  // Search user by name
   async searchByName(name: string) {
     return this.prisma.nguoiDung.findMany({
       where: {
@@ -111,7 +111,7 @@ export class UsersService {
     });
   }
 
-  // Cập nhật user
+  // Update user
   async update(id: number, updateUserDto: UpdateUserDto) {
     // Check if user exists
     const existingUser = await this.prisma.nguoiDung.findUnique({

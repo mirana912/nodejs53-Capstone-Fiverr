@@ -9,7 +9,7 @@ export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
   /**
-   * Lấy comments của job
+   * Get comments of job
    */
   async getJobComments(jobId: number) {
     const job = await this.prisma.congViec.findUnique({
@@ -38,7 +38,7 @@ export class CommentsService {
   }
 
   /**
-   * Tạo comment mới
+   * Create new comment
    */
   async create(userId: number, createCommentDto: CreateCommentDto) {
     // Verify job exists
@@ -73,7 +73,7 @@ export class CommentsService {
   }
 
   /**
-   * Xóa comment
+   * Delete comment
    */
   async remove(id: number, userId: number) {
     const comment = await this.prisma.binhLuan.findUnique({
@@ -102,7 +102,7 @@ export class CommentsService {
   }
 
   /**
-   * Cập nhật rating trung bình của job
+   * Update average rating of job
    */
   private async updateJobRating(jobId: number) {
     const comments = await this.prisma.binhLuan.findMany({

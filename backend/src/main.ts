@@ -6,11 +6,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { AllExceptionsFilter } from './common/filters/http-exception.filter';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { join } from 'path';
-// import { config } from 'process';
-// import { transcode } from 'buffer';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -20,7 +19,7 @@ async function bootstrap() {
   const apiPrefix = configService.get<string>('app.apiPrefix') ?? 'api';
   const nodeEnv = configService.get<string>('app.nodeEnv');
 
-  app.setGlobalPrefix(apiPrefix);
+  app.setGlobalPrefix('api');
 
   app.enableCors({
     origin: configService.get<string>('cors.origin') || '*',
@@ -37,10 +36,22 @@ async function bootstrap() {
       transformOptions: {
         enableImplicitConversion: true,
       },
+      errorHttpStatusCode: 422,
+      exceptionFactory: (errors) => {
+        const messages = errors.map((error) => ({
+          field: error.property,
+          errors: Object.values(error.constraints || {}),
+        }));
+        return {
+          statusCode: 422,
+          message: 'Validation failed',
+          errors: messages,
+        };
+      },
     }),
   );
-  app.useGlobalFilters(new AllExceptionsFilter());
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor(), new TransformInterceptor());
 
   // Serve static files (uploaded images)
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {

@@ -14,7 +14,7 @@ export class HireService {
   constructor(private prisma: PrismaService) {}
 
   /**
-   * Thuê công việc
+   * Hire job
    */
   async hireJob(userId: number, hireJobDto: HireJobDto) {
     // Verify job exists
@@ -66,7 +66,7 @@ export class HireService {
   }
 
   /**
-   * Lấy danh sách công việc đã thuê của user
+   * Get hired jobs by user
    */
   async getMyHiredJobs(userId: number) {
     return this.prisma.thueCongViec.findMany({
@@ -96,7 +96,7 @@ export class HireService {
   }
 
   /**
-   * Lấy chi tiết 1 hire record
+   * Get 1 hire record
    */
   async getHireDetail(id: number, userId: number) {
     const hire = await this.prisma.thueCongViec.findUnique({
@@ -141,7 +141,7 @@ export class HireService {
   }
 
   /**
-   * Đánh dấu hoàn thành công việc
+   * Markdown a complete hire job
    */
   async completeJob(id: number, userId: number, updateHireDto: UpdateHireDto) {
     const hire = await this.prisma.thueCongViec.findUnique({
@@ -175,7 +175,7 @@ export class HireService {
   }
 
   /**
-   * Hủy thuê công việc (xóa hire record)
+   * Cancel hire job
    */
   async cancelHire(id: number, userId: number) {
     const hire = await this.prisma.thueCongViec.findUnique({
@@ -199,7 +199,7 @@ export class HireService {
   }
 
   /**
-   * Lấy danh sách người đã thuê công việc (cho job owner)
+   * Get list of Job Hires Users
    */
   async getJobHires(jobId: number, userId: number) {
     // Verify job exists and user is owner

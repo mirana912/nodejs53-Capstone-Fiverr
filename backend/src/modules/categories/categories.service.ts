@@ -8,7 +8,7 @@ export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
   /**
-   * Lấy tất cả loại công việc
+   * Find all categories
    */
   async findAll() {
     return this.prisma.loaiCongViec.findMany({
@@ -22,7 +22,7 @@ export class CategoriesService {
   }
 
   /**
-   * Lấy loại công việc theo ID
+   * Find category by ID
    */
   async findOne(id: number) {
     const category = await this.prisma.loaiCongViec.findUnique({
@@ -40,7 +40,7 @@ export class CategoriesService {
   }
 
   /**
-   * Lấy chi tiết loại công việc theo category ID
+   * Get detail category ID
    */
   async getCategoryDetails(categoryId: number) {
     const category = await this.prisma.loaiCongViec.findUnique({
@@ -63,7 +63,7 @@ export class CategoriesService {
   }
 
   /**
-   * Lấy tất cả chi tiết loại công việc
+   * Find all detail categories
    */
   async getAllDetails() {
     return this.prisma.chiTietLoaiCongViec.findMany({

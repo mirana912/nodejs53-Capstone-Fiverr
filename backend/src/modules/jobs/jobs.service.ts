@@ -9,7 +9,7 @@ export class JobsService {
   constructor(private prisma: PrismaService) {}
 
   /**
-   * Lấy tất cả jobs với pagination và filter
+   * Find all jobs with pagination & filter
    */
   async findAll(query: {
     page?: number;
@@ -20,7 +20,7 @@ export class JobsService {
     maxPrice?: number;
   }) {
     const page = query.page || 1;
-    const limit = query.limit || 10;
+    const limit = Math.min(query.limit || 10, 100);
     const skip = (page - 1) * limit;
 
     const where: any = {};
@@ -49,17 +49,31 @@ export class JobsService {
         where,
         skip,
         take: limit,
-        include: {
-          chiTietLoaiCongViec: {
-            include: {
-              loaiCongViec: true,
-            },
-          },
+        select: {
+          id: true,
+          ten_cong_viec: true,
+          gia_tien: true,
+          hinh_anh: true,
+          mo_ta_ngan: true,
+          sao_cong_viec: true,
+          danh_gia: true,
+          createdAt: true,
           nguoiDung: {
             select: {
               id: true,
               name: true,
-              email: true,
+            },
+          },
+          chiTietLoaiCongViec: {
+            select: {
+              id: true,
+              ten_chi_tiet: true,
+              loaiCongViec: {
+                select: {
+                  id: true,
+                  ten_loai_cong_viec: true,
+                },
+              },
             },
           },
         },
@@ -70,19 +84,23 @@ export class JobsService {
       this.prisma.congViec.count({ where }),
     ]);
 
+    const totalPages = Math.ceil(total / limit);
+
     return {
       data: jobs,
       meta: {
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit),
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
       },
     };
   }
 
   /**
-   * Lấy job theo ID
+   * Search job by ID
    */
   async findOne(id: number) {
     const job = await this.prisma.congViec.findUnique({
@@ -115,6 +133,7 @@ export class JobsService {
           orderBy: {
             createdAt: 'desc',
           },
+          take: 10,
         },
       },
     });
@@ -127,7 +146,7 @@ export class JobsService {
   }
 
   /**
-   * Tạo job mới
+   * Create job
    */
   async create(userId: number, createJobDto: CreateJobDto) {
     // Verify category detail exists
@@ -164,11 +183,12 @@ export class JobsService {
   }
 
   /**
-   * Cập nhật job
+   * Update job
    */
   async update(id: number, userId: number, updateJobDto: UpdateJobDto) {
     const job = await this.prisma.congViec.findUnique({
       where: { id },
+      select: { id: true, nguoi_tao: true },
     });
 
     if (!job) {
@@ -201,11 +221,12 @@ export class JobsService {
   }
 
   /**
-   * Xóa job
+   * Delete job
    */
   async remove(id: number, userId: number) {
     const job = await this.prisma.congViec.findUnique({
       where: { id },
+      select: { id: true, nguoi_tao: true },
     });
 
     if (!job) {
@@ -225,15 +246,30 @@ export class JobsService {
   }
 
   /**
-   * Lấy jobs của user
+   * Get jobs by user
    */
   async getMyJobs(userId: number) {
     return this.prisma.congViec.findMany({
       where: { nguoi_tao: userId },
-      include: {
+      select: {
+        id: true,
+        ten_cong_viec: true,
+        gia_tien: true,
+        hinh_anh: true,
+        mo_ta_ngan: true,
+        sao_cong_viec: true,
+        danh_gia: true,
+        createdAt: true,
         chiTietLoaiCongViec: {
-          include: {
-            loaiCongViec: true,
+          select: {
+            id: true,
+            ten_chi_tiet: true,
+            loaiCongViec: {
+              select: {
+                id: true,
+                ten_loai_cong_viec: true,
+              },
+            },
           },
         },
       },
