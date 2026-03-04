@@ -4,7 +4,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CongViec, CreateJobDto, UpdateJobDto, ApiResponse, PaginatedResponse } from '../models';
+import { Job, CreateJobDto, UpdateJobDto } from '../models';
+import { PaginatedResponse } from '../models/api-response.model';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +23,7 @@ export class JobService {
     limit?: number;
     search?: string;
     categoryId?: number;
-  }): Observable<ApiResponse<PaginatedResponse<CongViec>>> {
+  }): Observable<ApiResponse<PaginatedResponse<Job>>> {
     let httpParams = new HttpParams();
 
     if (params) {
@@ -32,7 +34,7 @@ export class JobService {
         httpParams = httpParams.set('categoryId', params.categoryId.toString());
     }
 
-    return this.http.get<ApiResponse<PaginatedResponse<CongViec>>>(this.API_URL, {
+    return this.http.get<ApiResponse<PaginatedResponse<Job>>>(this.API_URL, {
       params: httpParams,
     });
   }
@@ -40,22 +42,22 @@ export class JobService {
   /**
    * Lấy job theo ID
    */
-  getJobById(id: number): Observable<ApiResponse<CongViec>> {
-    return this.http.get<ApiResponse<CongViec>>(`${this.API_URL}/${id}`);
+  getJobById(id: number): Observable<ApiResponse<Job>> {
+    return this.http.get<ApiResponse<Job>>(`${this.API_URL}/${id}`);
   }
 
   /**
    * Tạo job mới
    */
-  createJob(jobData: CreateJobDto): Observable<ApiResponse<CongViec>> {
-    return this.http.post<ApiResponse<CongViec>>(this.API_URL, jobData);
+  createJob(jobData: CreateJobDto): Observable<ApiResponse<Job>> {
+    return this.http.post<ApiResponse<Job>>(this.API_URL, jobData);
   }
 
   /**
    * Cập nhật job
    */
-  updateJob(id: number, jobData: UpdateJobDto): Observable<ApiResponse<CongViec>> {
-    return this.http.patch<ApiResponse<CongViec>>(`${this.API_URL}/${id}`, jobData);
+  updateJob(id: number, jobData: UpdateJobDto): Observable<ApiResponse<Job>> {
+    return this.http.patch<ApiResponse<Job>>(`${this.API_URL}/${id}`, jobData);
   }
 
   /**
@@ -75,8 +77,8 @@ export class JobService {
   /**
    * Lấy jobs của user hiện tại
    */
-  getMyJobs(): Observable<ApiResponse<CongViec[]>> {
-    return this.http.get<ApiResponse<CongViec[]>>(`${this.API_URL}/my-jobs`);
+  getMyJobs(): Observable<ApiResponse<Job[]>> {
+    return this.http.get<ApiResponse<Job[]>>(`${this.API_URL}/my-jobs`);
   }
 
   /**
@@ -85,7 +87,6 @@ export class JobService {
   uploadJobImage(jobId: number, file: File): Observable<ApiResponse<any>> {
     const formData = new FormData();
     formData.append('file', file);
-
     return this.http.post<ApiResponse<any>>(`${this.API_URL}/${jobId}/upload-image`, formData);
   }
 }

@@ -2,9 +2,9 @@
 // ==========================================
 
 import { User } from './user.model';
-import { ChiTietLoaiCongViec } from './category.model';
+import { CategoryDetail } from './category.model';
 
-export interface CongViec {
+export interface Job {
   id: number;
   ten_cong_viec: string;
   danh_gia: number;
@@ -19,12 +19,12 @@ export interface CongViec {
   updatedAt: Date;
 
   // Optional relations
-  chiTietLoaiCongViec?: ChiTietLoaiCongViec;
+  chiTietLoaiCongViec?: CategoryDetail;
   nguoiDung?: User;
-  binhLuan?: BinhLuan[];
+  binhLuan?: Comments[];
 }
 
-export interface BinhLuan {
+export interface Comments {
   id: number;
   ma_cong_viec: number;
   ma_nguoi_binh_luan: number;
@@ -48,7 +48,7 @@ export interface ThueCongViec {
   updatedAt: Date;
 
   // Optional relations
-  congViec?: CongViec;
+  congViec?: Job;
   nguoiDung?: User;
 }
 
@@ -59,6 +59,22 @@ export interface CreateJobDto {
   mo_ta?: string;
   mo_ta_ngan?: string;
   ma_chi_tiet_loai: number;
+}
+
+export interface JobsResponse {
+  statusCode: number;
+  message: string;
+  data: {
+    data: Job[];
+    meta: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
 }
 
 export interface UpdateJobDto extends Partial<CreateJobDto> {}

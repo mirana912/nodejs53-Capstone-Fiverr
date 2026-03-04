@@ -22,7 +22,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   app.enableCors({
-    origin: configService.get<string>('cors.origin') || '*',
+    origin: [
+      'http://localhost:4200', // Angular dev server
+    ],
     credentials: configService.get<boolean>('cors.credentials'),
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],

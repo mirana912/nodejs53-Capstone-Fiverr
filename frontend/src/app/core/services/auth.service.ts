@@ -5,7 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { LoginDto, RegisterDto, AuthResponse, JwtPayload, ApiResponse } from '../models';
+import { LoginDto, RegisterDto, AuthResponse, User } from '../models';
+import { ApiResponse } from '../models/api-response.model';
+import { JwtPayload } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -41,7 +43,7 @@ export class AuthService {
     return this.http.post<ApiResponse<AuthResponse>>(`${this.API_URL}/login`, credentials).pipe(
       tap((response) => {
         if (response.content) {
-          this.setSession(response.content);
+          this.setSession(response.content as any);
         }
       }),
       catchError(this.handleError),
@@ -55,7 +57,7 @@ export class AuthService {
     return this.http.post<ApiResponse<AuthResponse>>(`${this.API_URL}/register`, userData).pipe(
       tap((response) => {
         if (response.content) {
-          this.setSession(response.content);
+          this.setSession(response.content as any);
         }
       }),
       catchError(this.handleError),
@@ -89,11 +91,11 @@ export class AuthService {
   /**
    * Lưu session sau khi đăng nhập/đăng ký
    */
-  private setSession(authResult: AuthResponse): void {
-    localStorage.setItem(this.TOKEN_KEY, authResult.access_token);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(authResult.user));
+  private setSession(authData: { access_token: string; user: User }): void {
+    localStorage.setItem(this.TOKEN_KEY, authData.access_token);
+    localStorage.setItem(this.USER_KEY, JSON.stringify(authData.user));
 
-    const decoded = this.decodeToken(authResult.access_token);
+    const decoded = this.decodeToken(authData.access_token);
     this.currentUserSubject.next(decoded);
     this.isAuthenticatedSubject.next(true);
   }

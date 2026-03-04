@@ -4,7 +4,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { BinhLuan, ApiResponse } from '../models';
+import { Comments } from '../models';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,8 @@ export class CommentService {
   /**
    * Lấy comments của job
    */
-  getJobComments(jobId: number): Observable<ApiResponse<BinhLuan[]>> {
-    return this.http.get<ApiResponse<BinhLuan[]>>(`${this.API_URL}/job/${jobId}`);
+  getJobComments(jobId: number): Observable<ApiResponse<Comments[]>> {
+    return this.http.get<ApiResponse<Comments[]>>(`${this.API_URL}/job/${jobId}`);
   }
 
   /**
@@ -29,8 +30,8 @@ export class CommentService {
       noi_dung: string;
       sao_binh_luan: number;
     },
-  ): Observable<ApiResponse<BinhLuan>> {
-    return this.http.post<ApiResponse<BinhLuan>>(this.API_URL, {
+  ): Observable<ApiResponse<Comments>> {
+    return this.http.post<ApiResponse<Comments>>(this.API_URL, {
       ma_cong_viec: jobId,
       ...data,
     });

@@ -19,6 +19,20 @@ export interface UserProfile extends User {
   // Có thể extend thêm fields cho profile page
 }
 
+export interface LoginDto {
+  email: string;
+  pass_word: string;
+}
+
+export interface RegisterDto {
+  name: string;
+  email: string;
+  pass_word: string;
+  phone?: string;
+  birth_day?: string;
+  gender?: 'male' | 'female' | 'other';
+}
+
 export interface UpdateUserDto {
   name?: string;
   phone?: string;
@@ -27,5 +41,12 @@ export interface UpdateUserDto {
   skill?: string;
   certification?: string;
 }
-
+export interface AuthResponse {
+  statusCode: number;
+  message: string;
+  data: {
+    access_token: string;
+    user: User;
+  };
+}
 // ==========================================

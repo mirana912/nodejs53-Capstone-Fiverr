@@ -135,7 +135,7 @@ INSERT INTO binh_luan (ma_cong_viec, ma_nguoi_binh_luan, ngay_binh_luan, noi_dun
 -- ==========================================
 -- Success Message
 -- ==========================================
-SELECT '✅ Database seeded successfully!' AS Status;
+SELECT 'Database seeded successfully!' AS Status;
 SELECT COUNT(*) AS 'Total Users' FROM nguoi_dung;
 SELECT COUNT(*) AS 'Total Job Categories' FROM loai_cong_viec;
 SELECT COUNT(*) AS 'Total Category Details' FROM chi_tiet_loai_cong_viec;
