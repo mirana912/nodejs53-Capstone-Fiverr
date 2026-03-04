@@ -43,4 +43,4 @@ RUN mkdir -p uploads
 EXPOSE 8080
 
 # Start application
-CMD ["sh", "-c", "npx prisma db push && node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
